@@ -1,6 +1,6 @@
 {
     "name": "@plurnk/plurnk-mimetypes-grammar-python",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Pre-built tree-sitter-python WASM grammar for @plurnk/plurnk-mimetypes. Install this package to enable Python (text/x-python) support in plurnk-service.",
     "type": "module",
     "license": "MIT",
