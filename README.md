@@ -8,8 +8,6 @@ Pre-built `tree-sitter-python` WASM grammar for the [@plurnk/plurnk-mimetypes](h
 npm i @plurnk/plurnk-mimetypes-grammar-python
 ```
 
-That's it — the framework automatically picks up the bundled WASM and enables Python (`text/x-python`) support.
-
 ## what's in here
 
 - **`python.wasm`** — pre-built from the pinned upstream [tree-sitter-python](https://github.com/tree-sitter/tree-sitter-python) commit (recorded in `.grammar-pin`)
@@ -18,11 +16,7 @@ That's it — the framework automatically picks up the bundled WASM and enables 
 
 There is no runtime code here. The framework's `TreeSitterLanguageHandler` resolves the WASM via `import.meta.resolve("@plurnk/plurnk-mimetypes-grammar-python/python.wasm")` and loads it through `web-tree-sitter`.
 
-## why a separate package
-
-Plurnk's "support every grammar" promise is paid for by per-grammar packages. The framework alone is small; you install only the grammars you actually use. Want Python? Install this. Want everything? `npm i @plurnk/plurnk-mimetypes-grammars-all`.
-
-This model also kills the long-standing peer-dependency conflict between upstream `tree-sitter-{lang}` packages (which all declare different peer ranges of the native `tree-sitter` binding, which we don't need). Our grammar packages declare only `web-tree-sitter` as a peer — no node-gyp, no conflicts, ever.
+Declares only `web-tree-sitter` as a peer — no native `tree-sitter`, no node-gyp.
 
 ## license
 
