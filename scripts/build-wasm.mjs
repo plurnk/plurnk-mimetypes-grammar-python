@@ -1,10 +1,6 @@
 #!/usr/bin/env node
-// Reproducible WASM build for tree-sitter-python.
-//
-// Clones the upstream grammar at the pinned commit in .grammar-pin, runs
-// `tree-sitter generate && tree-sitter build --wasm`, and writes python.wasm
-// at the package root.
-import { mkdtemp, readFile, copyFile } from "node:fs/promises";
+// Reproducible tree-sitter-python WASM build under {§grammar-leaf-reproducibility}.
+import { mkdtempDisposable, readFile, copyFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawn } from "node:child_process";
@@ -14,19 +10,21 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const pinPath = path.join(repoRoot, ".grammar-pin");
 const wasmPath = path.join(repoRoot, "python.wasm");
 
+const source = (await readFile(path.join(repoRoot, ".grammar-source"), "utf-8")).trim();
 const pin = (await readFile(pinPath, "utf-8")).trim();
-if (!/^[0-9a-f]{7,40}$/i.test(pin)) {
-    throw new Error(`.grammar-pin must be a git commit SHA, got: ${pin}`);
+if (!/^[0-9a-f]{40}$/i.test(pin)) {
+    throw new Error(`.grammar-pin must be a full git commit SHA, got: ${pin}`);
 }
 
-const work = await mkdtemp(path.join(tmpdir(), "grammar-python-build-"));
+await using temporary = await mkdtempDisposable(path.join(tmpdir(), "grammar-python-build-"));
+const work = temporary.path;
 console.log(`build root: ${work}`);
 
-await run("git", ["clone", "--no-checkout", "https://github.com/tree-sitter/tree-sitter-python.git", "src"], { cwd: work });
-await run("git", ["checkout", pin], { cwd: path.join(work, "src") });
-await run("npm", ["install", "--no-save", "tree-sitter-cli@^0.26.0"], { cwd: work });
+await run("git", ["init", "--quiet", "src"], { cwd: work });
+await run("git", ["fetch", "--quiet", "--depth=1", source, pin], { cwd: path.join(work, "src") });
+await run("git", ["checkout", "--quiet", "--detach", "FETCH_HEAD"], { cwd: path.join(work, "src") });
 
-const cli = path.join(work, "node_modules", ".bin", "tree-sitter");
+const cli = path.join(repoRoot, "node_modules", ".bin", "tree-sitter");
 await run(cli, ["generate"], { cwd: path.join(work, "src") });
 await run(cli, ["build", "--wasm"], { cwd: path.join(work, "src") });
 
