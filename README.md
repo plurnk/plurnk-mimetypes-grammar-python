@@ -1,6 +1,6 @@
 # @plurnk/plurnk-mimetypes-grammar-python
 
-Pre-built `tree-sitter-python` WASM grammar for the [@plurnk/plurnk-mimetypes](https://github.com/plurnk/plurnk-mimetypes) framework.
+Pre-built `tree-sitter-python` WASM grammar for the [@plurnk/plurnk-mimetypes](https://github.com/plurnk/plurnk-service/tree/main/plurnk-mimetypes) framework.
 
 ## install
 
@@ -21,3 +21,8 @@ Declares only `web-tree-sitter` as a peer — no native `tree-sitter`, no node-g
 ## license
 
 MIT. The bundled `python.wasm` is built from the upstream tree-sitter-python grammar, which is MIT-licensed; see the pinned commit for that project's attribution.
+
+## Versioning
+
+This package versions independently. Compatibility is declared by its dependency
+ranges; a Plurnk release does not require a release of this package.

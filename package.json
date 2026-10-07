@@ -1,6 +1,6 @@
 {
     "name": "@plurnk/plurnk-mimetypes-grammar-python",
-    "version": "1.16.2",
+    "version": "2.0.0",
     "description": "Pre-built tree-sitter-python WASM grammar for @plurnk/plurnk-mimetypes. Install this package to enable Python (text/x-python) support in plurnk-service.",
     "type": "module",
     "license": "MIT",
@@ -28,7 +28,8 @@
         "build:wasm": "node scripts/build-wasm.mjs",
         "verify:wasm": "node scripts/verify-wasm.mjs",
         "update:pin": "node scripts/update-pin.mjs",
-        "update": "npm run update:pin && npm run build:wasm && npm run verify:wasm"
+        "update": "npm run update:pin && npm run build:wasm && npm run verify:wasm",
+        "test": "npm run verify:wasm"
     },
     "devDependencies": {
         "tree-sitter-cli": "0.27.0"
@@ -37,18 +38,16 @@
         "tree-sitter-cli@0.27.0": true
     },
     "peerDependencies": {
-        "@plurnk/plurnk-mimetypes": "^1.16.1",
         "web-tree-sitter": "^0.25.0 || ^0.26.0 || ^0.27.0"
     },
     "peerDependenciesMeta": {
-        "@plurnk/plurnk-mimetypes": {
-            "optional": false
-        },
         "web-tree-sitter": {
             "optional": false
         }
     },
-    "plurnk": {
-        "builtAgainst": "1.16.1"
-    }
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/plurnk/plurnk-mimetypes-grammar-python.git"
+    },
+    "homepage": "https://github.com/plurnk/plurnk-mimetypes-grammar-python#readme"
 }
